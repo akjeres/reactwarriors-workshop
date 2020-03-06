@@ -1,6 +1,6 @@
 import React from "react";
-import { moviesData } from "../moviesData";
 import MovieItem from "./MovieItem";
+import { API_URL, API_KEY_3 } from "../utils/api";
 
 // UI = fn(state, props)
 
@@ -11,15 +11,40 @@ class App extends React.Component {
     super();
 
     this.state = {
-      movies: moviesData,
-      moviesWillWatch: []
+      movies: [],
+      moviesWillWatch: [],
+      req: '/discover/movie',
+      sort: 'popularity.desc',
     };
+
+    console.log('constructor');
   }
+
+  componentDidMount() {
+    const { req, sort } = this.state;
+    console.log('did mount');
+    fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}`)
+        .then(res => {
+            if (!res.ok) throw new Error(`"${req}" method was not found. Status ${res.status}.`);
+            console.log(res);
+            return res.json();
+        })
+        .then(res => {
+            this.setState({
+                movies: res.results
+            });
+        })
+        .catch(e => {
+            console.error(e.message);
+            this.setState({
+                movies: []
+            });
+        });
+  };
 
   deleteMovie = movie => {
     console.log(movie.id);
     const updateMovies = this.state.movies.filter(item => item.id !== movie.id);
-    console.log(updateMovies);
 
     // this.state.movies = updateMovies;
     this.setState({
@@ -47,13 +72,14 @@ class App extends React.Component {
   };
 
   render() {
-    console.log("render", this);
+    console.log("render");
     return (
       <div className="container">
         <div className="row mt-4">
           <div className="col-9">
             <div className="row">
               {this.state.movies.map(movie => {
+                if (!('id' in movie)) return null;
                 return (
                   <div className="col-6 mb-4" key={movie.id}>
                     <MovieItem
