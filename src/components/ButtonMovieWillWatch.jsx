@@ -1,25 +1,36 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export default class ButtonMovieWillWatch extends React.Component {
     constructor() {
         super();
-
+        console.log('classNames: ', typeof classNames);
         this.state = {
             willWatch: false,
         };
     };
 
     render() {
-        const text = this.state.willWatch ? 'Remove Will Watch' : 'Will Watch',
-              extra_className = this.state.willWatch ? 'btn-success' : 'btn-secondary',
-              handler = this.state.willWatch ? this.props.remove : this.props.add;
+        const { willWatch } = this.state,
+              { remove, add } = this.props,
+              text = willWatch ? 'Remove Will Watch' : 'Will Watch',
+              handler = willWatch ? remove : add;
         return (
-            <button type="button" className={ "btn " + extra_className } onClick={ () => {
-                this.setState({
-                    willWatch: !this.state.willWatch,
-                });
-                handler(this.props.movie);
-            } }>
+            <button type="button" className={
+                    classNames(
+                        'btn',
+                        { 'btn-success': !!willWatch },
+                        { 'btn-secondary': !willWatch },
+                    )
+                }
+                onClick={ () => {
+                    this.setState({
+                        willWatch: !willWatch,
+                    });
+                    handler(this.props.movie);
+                   }
+                }
+            >
                 { text }
             </button>
         );
