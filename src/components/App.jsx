@@ -1,5 +1,6 @@
 import React from "react";
 import MovieItem from "./MovieItem";
+import MovieTabs from "./MovieTabs";
 import { API_URL, API_KEY_3 } from "../utils/api";
 
 // UI = fn(state, props)
@@ -15,15 +16,16 @@ class App extends React.Component {
       moviesWillWatch: [],
       req: '/discover/movie',
       sort: 'popularity.desc',
+      page: 1,
     };
 
     console.log('constructor');
   }
 
   componentDidMount() {
-    const { req, sort } = this.state;
+    const { req, sort, page } = this.state;
     console.log('did mount');
-    fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}`)
+    fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}&page=${page}`)
         .then(res => {
             if (!res.ok) throw new Error(`"${req}" method was not found. Status ${res.status}.`);
             console.log(res);
@@ -71,12 +73,26 @@ class App extends React.Component {
     });
   };
 
+  updateSort = value => {
+    this.setState({
+        sort: value,
+    });
+  };
+
   render() {
     console.log("render");
     return (
       <div className="container">
         <div className="row mt-4">
           <div className="col-9">
+            <div className="row mb-4">
+                <div className="col-12">
+                    <MovieTabs
+                        sort={this.state.sort}
+                        updateSort={this.updateSort}
+                    />
+                </div>
+            </div>
             <div className="row">
               {this.state.movies.map(movie => {
                 if (!('id' in movie)) return null;

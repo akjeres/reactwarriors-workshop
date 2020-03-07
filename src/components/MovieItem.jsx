@@ -1,4 +1,5 @@
 import React from "react";
+import ButtonMovieWillWatch from "./ButtonMovieWillWatch";
 
 class MovieItem extends React.Component {
   state = {
@@ -25,33 +26,10 @@ class MovieItem extends React.Component {
           <h6 className="card-title">{data.title}</h6>
           <div className="d-flex justify-content-between align-items-center">
             <p className="mb-0">Rating: {data.vote_average}</p>
-            {this.state.willWatch ? (
-              <button
-                type="button"
-                className="btn btn-success"
-                onClick={() => {
-                  this.setState({
-                    willWatch: false
-                  });
-                  deleteMovieFromWillWatch(data);
-                }}
-              >
-                Will Watch
-              </button>
-            ) : (
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => {
-                    this.setState({
-                      willWatch: true
-                    });
-                    addMovieToWillWatch(data);
-                  }}
-                >
-                  Will Watch
-              </button>
-              )}
+            <ButtonMovieWillWatch
+                remove={ deleteMovieFromWillWatch.bind(null, data) }
+                add={ addMovieToWillWatch.bind(null, data) }
+            />
           </div>
           <button
             type="button"
