@@ -2,11 +2,24 @@ import React from 'react';
 import SortButton from './SortButton';
 
 export default class MovieTabs extends React.Component {
+    componentWillReceiveProps(nextProps, nextState) {
+        console.log('MovieTab will receive props');
+        console.log('next: ', nextProps.sort);
+        console.log('this: ', this.props.sort);
+    };
+
+    shouldComponentUpdate(nextPops, nextState) {
+        console.log('MovieTab should component update');
+
+        return nextPops.sort !== this.props.sort;
+    };
+
     getClassName = (example, value) => {
         return example === value ? 'active' : null;
     };
 
     render() {
+        console.log('MovieTab render');
         const { sort, updateSort } = this.props;
         return(
           <ul className="tabs nav nav-pills">

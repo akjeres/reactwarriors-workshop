@@ -19,10 +19,10 @@ class App extends React.Component {
       page: 1,
     };
 
-    console.log('constructor');
+    console.log('App constructor');
   }
 
-  callAPI(obj) {
+  getMovies(obj) {
       const { req, sort, page } = obj;
 
       fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}&page=${page}`)
@@ -45,18 +45,18 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log('did mount');
-    this.callAPI(this.state);
+    console.log('App did mount');
+    this.getMovies(this.state);
   };
 
   componentDidUpdate(prevProps, prevState) {
-      console.log('did update', this.state.sort);
+      console.log('App did update', this.state.sort);
       console.log('prev', prevProps, prevState);
       console.log('this', this.props, this.state);
 
       if (prevState.sort !== this.state.sort) {
           console.log('call api');
-          this.callAPI(this.state);
+          this.getMovies(this.state);
       }
   };
 
@@ -96,7 +96,7 @@ class App extends React.Component {
   };
 
   render() {
-    console.log("render", this.state.sort);
+    console.log("App render", this.state.sort);
     return (
       <div className="container">
         <div className="row mt-4">
