@@ -4,7 +4,6 @@ import classNames from 'classnames';
 export default class ButtonMovieWillWatch extends React.Component {
     constructor() {
         super();
-        console.log('classNames: ', typeof classNames);
         this.state = {
             willWatch: false,
         };
