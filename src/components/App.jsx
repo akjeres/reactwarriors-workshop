@@ -1,6 +1,7 @@
 import React from "react";
 import MovieItem from "./MovieItem";
 import MovieTabs from "./MovieTabs";
+import Pagination from "./Pagination";
 import { API_URL, API_KEY_3 } from "../utils/api";
 
 // UI = fn(state, props)
@@ -138,6 +139,13 @@ class App extends React.Component {
               ))}
             </ul>
           </div>
+        </div>
+        <div className="row">
+            <div className="col-9">
+                <Pagination
+                    page={this.state.page}
+                />
+            </div>
         </div>
       </div>
     );
