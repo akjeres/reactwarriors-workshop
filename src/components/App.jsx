@@ -22,26 +22,42 @@ class App extends React.Component {
     console.log('constructor');
   }
 
+  callAPI(obj) {
+      const { req, sort, page } = obj;
+
+      fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}&page=${page}`)
+          .then(res => {
+              if (!res.ok) throw new Error(`"${req}" method was not found. Status ${res.status}.`);
+              console.log(res);
+              return res.json();
+          })
+          .then(res => {
+              this.setState({
+                  movies: res.results
+              });
+          })
+          .catch(e => {
+              console.error(e.message);
+              this.setState({
+                  movies: []
+              });
+          });
+  };
+
   componentDidMount() {
-    const { req, sort, page } = this.state;
     console.log('did mount');
-    fetch(`${API_URL}${req}?api_key=${API_KEY_3}&sort_by=${sort}&page=${page}`)
-        .then(res => {
-            if (!res.ok) throw new Error(`"${req}" method was not found. Status ${res.status}.`);
-            console.log(res);
-            return res.json();
-        })
-        .then(res => {
-            this.setState({
-                movies: res.results
-            });
-        })
-        .catch(e => {
-            console.error(e.message);
-            this.setState({
-                movies: []
-            });
-        });
+    this.callAPI(this.state);
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+      console.log('did update', this.state.sort);
+      console.log('prev', prevProps, prevState);
+      console.log('this', this.props, this.state);
+
+      if (prevState.sort !== this.state.sort) {
+          console.log('call api');
+          this.callAPI(this.state);
+      }
   };
 
   deleteMovie = movie => {
@@ -80,7 +96,7 @@ class App extends React.Component {
   };
 
   render() {
-    console.log("render");
+    console.log("render", this.state.sort);
     return (
       <div className="container">
         <div className="row mt-4">
